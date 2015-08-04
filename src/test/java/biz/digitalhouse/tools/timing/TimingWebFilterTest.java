@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
  * @author eugene.karanda
  * @version 1.0 Create: 03.08.2015 16:06
  */
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 @SpringBootApplication
 public class TimingWebFilterTest {
 

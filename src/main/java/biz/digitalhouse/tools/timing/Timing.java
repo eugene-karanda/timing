@@ -1,9 +1,8 @@
 package biz.digitalhouse.tools.timing;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,14 +11,14 @@ import java.util.Objects;
  * @version 1.0 Create: 02.08.2015 15:29
  */
 public class Timing {
-    private final Instant startInstant;
-    private final Instant endInstant;
-    private final Duration duration;
+    private final Date startInstant;
+    private final Date endInstant;
+    private final long duration;
     private final String message;
 
     private final List<Timing> childTimings;
 
-    private Timing(Instant startInstant, Instant endInstant, Duration duration, String message, List<Timing> childTimings) {
+    private Timing(Date startInstant, Date endInstant, long duration, String message, List<Timing> childTimings) {
         this.startInstant = startInstant;
         this.endInstant = endInstant;
         this.duration = duration;
@@ -27,12 +26,12 @@ public class Timing {
         this.childTimings = childTimings;
     }
 
-    public static Timing create(Instant startInstant, Instant endInstant, String message, List<Timing> childTimings) {
+    public static Timing create(Date startInstant, Date endInstant, String message, List<Timing> childTimings) {
         Objects.requireNonNull(startInstant, "'startInstant' must be not null");
         Objects.requireNonNull(endInstant, "'endInstant' must be not null");
         Objects.requireNonNull(message, "'message' must be not null");
 
-        Duration duration = Duration.between(startInstant, endInstant);
+        long duration = endInstant.getTime() - startInstant.getTime();
 
         ArrayList<Timing> modifiableChildList = childTimings != null ?
                 new ArrayList<Timing>(childTimings) :
@@ -42,15 +41,15 @@ public class Timing {
         return new Timing(startInstant, endInstant, duration, message, childTimings);
     }
 
-    public Instant getStartInstant() {
+    public Date getStartInstant() {
         return startInstant;
     }
 
-    public Instant getEndInstant() {
+    public Date getEndInstant() {
         return endInstant;
     }
 
-    public Duration getDuration() {
+    public long getDuration() {
         return duration;
     }
 
@@ -63,7 +62,7 @@ public class Timing {
     }
 
     @Override
-    public String toString() { //TODO update
+    public String toString() {
         return "Timing{" +
                 "startInstant=" + startInstant +
                 ", endInstant=" + endInstant +

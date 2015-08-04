@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,19 +24,19 @@ public class TimingBuilder {
     public TimingBuilder start(String message) {
         Objects.requireNonNull(message, "'message' must be not null");
 
-        Instant startInstant = Instant.now();
+        Date now = new Date();
 
         if(innerBuilder != null) {
-            innerBuilder = innerBuilder.start(startInstant, message);
+            innerBuilder = innerBuilder.start(now, message);
         } else {
-            innerBuilder = new InnerBuilder(Instant.now(), message, null);
+            innerBuilder = new InnerBuilder(now, message, null);
         }
 
         return this;
     }
 
     public TimingBuilder end() {
-        innerBuilder = innerBuilder.end(Instant.now());
+        innerBuilder = innerBuilder.end(new Date());
         return this;
     }
 
@@ -49,14 +49,14 @@ public class TimingBuilder {
     }
 
     private static class InnerBuilder {
-        private final Instant startInstant;
-        private Instant endInstant;
+        private final Date startInstant;
+        private Date endInstant;
         private final String message;
 
         private final List<Timing> childList = new ArrayList<Timing>();
         private final InnerBuilder parent;
 
-        private InnerBuilder(Instant startInstant, String message, InnerBuilder parent) {
+        private InnerBuilder(Date startInstant, String message, InnerBuilder parent) {
             this.startInstant = startInstant;
             this.message = message;
             this.parent = parent;
@@ -66,7 +66,7 @@ public class TimingBuilder {
             return parent == null;
         }
 
-        public InnerBuilder start(Instant startInstant, String message) {
+        public InnerBuilder start(Date startInstant, String message) {
             if(endInstant != null) {
                throw new IllegalStateException("Method 'end' already called");
             }
@@ -74,7 +74,7 @@ public class TimingBuilder {
             return new InnerBuilder(startInstant, message, this);
         }
 
-        public InnerBuilder end(Instant endInstant) {
+        public InnerBuilder end(Date endInstant) {
             if(this.endInstant != null) {
                 throw new IllegalStateException("Method 'end' already called");
             }

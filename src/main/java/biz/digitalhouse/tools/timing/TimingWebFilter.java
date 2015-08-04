@@ -1,6 +1,6 @@
 package biz.digitalhouse.tools.timing;
 
-import biz.digitalhouse.tools.timing.format.DebuggingTimingFormat;
+import biz.digitalhouse.tools.timing.format.DefaultTimingFormat;
 import biz.digitalhouse.tools.timing.format.TimingFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class TimingWebFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(TimingWebFilter.class);
 
-    private TimingFormat timingFormat = new DebuggingTimingFormat();
+    private TimingFormat timingFormat = new DefaultTimingFormat();
 
     @Autowired
     private TimingBuilder timingBuilder;
