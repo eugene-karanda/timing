@@ -2,7 +2,8 @@ package biz.digitalhouse.tools.timing;
 
 import biz.digitalhouse.tools.timing.format.DebuggingTimingFormat;
 import biz.digitalhouse.tools.timing.format.TimingFormat;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
  * @version 1.0 Create: 02.08.2015 18:29
  */
 public class TimingWebFilter extends OncePerRequestFilter {
-    private static final Logger logger = Logger.getLogger(TimingWebFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(TimingWebFilter.class);
 
     private TimingFormat timingFormat = new DebuggingTimingFormat();
 
