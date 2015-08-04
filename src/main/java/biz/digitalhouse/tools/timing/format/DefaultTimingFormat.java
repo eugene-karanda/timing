@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
  */
 public class DefaultTimingFormat implements TimingFormat {
 
-    private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSSS");
+    private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
 
     @Override
     public String format(Timing timing) {
