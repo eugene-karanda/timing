@@ -21,7 +21,7 @@ public class TimingBuilder {
     public TimingBuilder() {
     }
 
-    public TimingBuilder start(String message) {
+    public TimingBuilder.Token start(String message) {
         Objects.requireNonNull(message, "'message' must be not null");
 
         Date now = new Date();
@@ -32,12 +32,11 @@ public class TimingBuilder {
             innerBuilder = new InnerBuilder(now, message, null);
         }
 
-        return this;
+        return innerBuilder.getToken();
     }
 
-    public TimingBuilder end() {
-        innerBuilder = innerBuilder.end(new Date());
-        return this;
+    public void end(Token token) {
+        innerBuilder = innerBuilder.end(new Date(), token);
     }
 
     public Timing build() {
@@ -52,8 +51,9 @@ public class TimingBuilder {
         private final Date startInstant;
         private Date endInstant;
         private final String message;
+        private final Token token = new Token();
 
-        private final List<Timing> childList = new ArrayList<Timing>();
+        private final List<Timing> childList = new ArrayList<>();
         private final InnerBuilder parent;
 
         private InnerBuilder(Date startInstant, String message, InnerBuilder parent) {
@@ -66,6 +66,10 @@ public class TimingBuilder {
             return parent == null;
         }
 
+        public Token getToken() {
+            return token;
+        }
+
         public InnerBuilder start(Date startInstant, String message) {
             if(endInstant != null) {
                throw new IllegalStateException("Method 'end' already called");
@@ -74,7 +78,11 @@ public class TimingBuilder {
             return new InnerBuilder(startInstant, message, this);
         }
 
-        public InnerBuilder end(Date endInstant) {
+        public InnerBuilder end(Date endInstant, Token token) {
+            if(this.token != token) {
+                throw new IllegalArgumentException("Scope token is invalid");
+            }
+
             if(this.endInstant != null) {
                 throw new IllegalStateException("Method 'end' already called");
             }
@@ -92,5 +100,9 @@ public class TimingBuilder {
         public Timing build() {
             return Timing.create(startInstant, endInstant, message, childList);
         }
+    }
+
+    public static class Token {
+
     }
 }

@@ -3,6 +3,7 @@ package biz.digitalhouse.tools.timing;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
@@ -19,17 +20,17 @@ public class TimingAspect {
     @Autowired
     private TimingBuilder timingBuilder;
 
-    @Around("@annotation(measured)")
-    public Object around(ProceedingJoinPoint joinPoint, Measured measured) throws Throwable {
-        timingBuilder.start(buildMessage(joinPoint, measured));
+    @Around("@annotation(Measured)")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        TimingBuilder.Token token = timingBuilder.start(buildMessage(joinPoint));
         try {
             return joinPoint.proceed();
         } finally {
-            timingBuilder.end();
+            timingBuilder.end(token);
         }
     }
 
-    private String buildMessage(ProceedingJoinPoint joinPoint, Measured measured) {
+    private String buildMessage(ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         return MessageFormat.format("{0}.{1}({2})", signature.getDeclaringType().getSimpleName(),
                 signature.getName(),

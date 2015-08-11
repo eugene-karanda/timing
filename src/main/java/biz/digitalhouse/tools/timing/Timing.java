@@ -1,10 +1,6 @@
 package biz.digitalhouse.tools.timing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author eugene.karanda
@@ -34,7 +30,7 @@ public class Timing {
         long duration = endInstant.getTime() - startInstant.getTime();
 
         ArrayList<Timing> modifiableChildList = childTimings != null ?
-                new ArrayList<Timing>(childTimings) :
+                new ArrayList<>(childTimings) :
                 new ArrayList<Timing>();
 
         childTimings = Collections.unmodifiableList(modifiableChildList);

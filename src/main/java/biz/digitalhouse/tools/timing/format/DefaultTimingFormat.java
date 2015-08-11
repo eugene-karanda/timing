@@ -15,7 +15,7 @@ public class DefaultTimingFormat implements TimingFormat {
 
     @Override
     public String format(Timing timing) {
-        return format(new StringBuilder("\n"), timing, 0)
+        return format(new StringBuilder(), timing, 0)
                 .toString();
     }
 
